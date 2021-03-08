@@ -1,0 +1,19 @@
+server:
+  port: 8802
+spring:
+  application:
+    name: zookeeper-lock
+zookeeper:
+  connection:
+    # zookeeper \u5730\u5740
+    zkServer: 127.0.0.1:2181
+    namespace: abcdefg
+  curator:
+    retryCount: 5  #\u91CD\u8BD5\u6B21\u6570
+    elapsedTimeMs: 5000   #\u91CD\u8BD5\u95F4\u9694\u65F6\u95F4
+    sessionTimeoutMs: 60000  # session\u8D85\u65F6\u65F6\u95F4
+    connectionTimeoutMs: 5000  # \u8FDE\u63A5\u8D85\u65F6\u65F6\u95F4
+    baseSleepTimeMs: 1000  #\u521D\u59CB\u4F11\u7720\u65F6\u95F4
+    maxRetries: 2  #\u6700\u5927\u91CD\u8BD5\u6B21\u6570
+
+

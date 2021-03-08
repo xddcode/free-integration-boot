@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.free.sharding.mapper.UserMapper">
+
+    <sql id="Base_Column_List">
+      u.id,u.name,u.city_id,u.sex,u.phone,u.email,u.create_time,u.password
+    </sql>
+
+    <select id="selectUserList" resultType="com.free.sharding.model.User">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user u
+        <where>
+            1=1
+            <if test="id!=null and id!=''">
+                and u.id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                and u.name=#{name}
+            </if>
+            <if test="sex!=null">
+                and u.sex=#{sex}
+            </if>
+            <if test="cityId!=null">
+                and u.city_id=#{cityId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

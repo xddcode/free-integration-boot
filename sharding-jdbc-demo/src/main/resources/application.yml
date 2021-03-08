@@ -1,0 +1,51 @@
+server:
+  port: 8801
+spring:
+  application:
+    name: sharding-jdbc-demo
+  main:
+    allow-bean-definition-overriding: true
+  shardingsphere:
+    datasource:
+      names: ds-master-0,ds-master-1
+      ds-master-0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/shard_one?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+      ds-master-1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/shard_two?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+
+    sharding:
+      tables:
+        t_user:
+          actual-data-nodes: ds-master-$->{0..1}.t_user$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: t_user$->{id % 2}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+      default-database-strategy:
+        inline:
+          sharding-column: id
+          algorithm-expression: ds-master-$->{id % 2}
+      props:
+        sql:
+          show: true
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  type-aliases-package: com.free.sharding.model
+  global-config:
+    banner: false
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
