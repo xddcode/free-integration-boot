@@ -4,10 +4,10 @@ free_demo用于实现springboot2.0x整合各个目前比较火热的组件，并
 
 ### 目前已经整合有：
 
-- elasticsearch 实现索引的创建与查询
-- seata 实现分布式事务
-- sharding-jdbc 实现分库分表
-- zookeepe实现分布式锁
+- elasticsearch-demo 整合elasticsearch7.x实现数据的索引创建与查询
+- seata-demo 整合seata1.3实现springcloud alibaba下分布式事务
+- sharding-jdbc-demo 整合sharding-jdbc实现分库分表
+- zookeeper-lock-demo 整合zookeeper实现分布式锁
 
 free_demo的存在就是为了向部分初学者提供免费的集成demo，用于后期的自定义扩展和学习。
 
