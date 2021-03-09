@@ -1,39 +1,36 @@
 package com.free.es.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import java.util.Date;
 
 @Data
-@Document(indexName = "blog", type = "article")
 public class Article {
 
-    @Id
     private Long id;
 
-    @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String title;
 
-    @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String content;
 
-    @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String summary;
 
-    @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String author;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date createTime;
 
     public Article() {
     }
 
-    public Article(Long id, String title, String content, String summary, String author) {
+    public Article(Long id, String title, String content, String summary, String author, Date createTime) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.summary = summary;
         this.author = author;
+        this.createTime = createTime;
     }
 
 }

@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author songfayuan
+ * @author dinghao
+ * @date 2021/3/8
  */
 @Slf4j
 public class CuratorLock implements DistributeLock {
@@ -16,9 +17,10 @@ public class CuratorLock implements DistributeLock {
     @Value("${spring.profiles.active}")
     private String profile;
 
-    InterProcessMutex lock;
-    public CuratorLock(CuratorFramework client, String monitor) {
-        lock=new InterProcessMutex(client, monitor);
+    private InterProcessMutex lock;
+
+    CuratorLock(CuratorFramework client, String monitor) {
+        lock = new InterProcessMutex(client, monitor);
     }
 
 
@@ -28,7 +30,6 @@ public class CuratorLock implements DistributeLock {
             lock.acquire();
         } catch (Exception e) {
             log.warn("获取分布式锁异常，errMsg = {}", e);
-           // DingDingMsgSendUtils.sendDingDingGroupMsg("【系统消息】" + profile + "环境，获取分布式锁异常，errMsg = "+e);
         }
     }
 
@@ -38,7 +39,6 @@ public class CuratorLock implements DistributeLock {
             lock.release();
         } catch (Exception e) {
             log.warn("释放分布式锁异常，errMsg = {}", e);
-            //DingDingMsgSendUtils.sendDingDingGroupMsg("【系统消息】" + profile + "环境，释放分布式锁异常，errMsg = "+e);
         }
     }
 
@@ -51,7 +51,6 @@ public class CuratorLock implements DistributeLock {
             return lock.acquire(t, unit);
         } catch (Exception e) {
             log.warn("获取分布式锁（含等待时长）异常，errMsg = {}", e);
-            //DingDingMsgSendUtils.sendDingDingGroupMsg("【系统消息】" + profile + "环境，获取分布式锁（含等待时长）异常，errMsg = "+e);
             return false;
         }
     }

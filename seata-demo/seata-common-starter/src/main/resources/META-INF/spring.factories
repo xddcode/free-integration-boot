@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.free.seata.common.config.DataSourceProxyConfig,\
+com.free.seata.common.config.MybatisPlusConfig

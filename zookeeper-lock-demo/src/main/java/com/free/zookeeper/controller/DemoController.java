@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
@@ -19,10 +18,8 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/demo")
 public class DemoController implements DisposableBean {
 
-    private ExecutorService executor = Executors.newFixedThreadPool(10);  //newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
-
-    // @Autowired
-    //private MongoTemplate mongoTemplate;
+    //newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
+    private ExecutorService executor = Executors.newFixedThreadPool(10);
 
     @Autowired
     private DistributeLockFactory lockFactory;
@@ -69,7 +66,6 @@ public class DemoController implements DisposableBean {
                 }
             }
         });
-        //return Response.successResponse("请求成功");
     }
 
     /**
@@ -95,7 +91,6 @@ public class DemoController implements DisposableBean {
                     } finally {
                         lock.unlock();
                         log.info(Thread.currentThread().getName() + "释放锁...");
-                        log.info("**********************************************************************************");
                         log.info("**********************************************************************************");
                     }
 

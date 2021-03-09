@@ -6,6 +6,7 @@ import org.apache.curator.framework.CuratorFramework;
  * 分布式锁，先期使用curator的InterProcessMutex实现，后期根据需要改用自定义的lock。
  *
  * @author dinghao
+ * @date 2021/3/8
  */
 public class DistributeLockFactory {
 

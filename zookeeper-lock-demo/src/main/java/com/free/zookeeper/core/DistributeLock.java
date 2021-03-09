@@ -4,7 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 不需要实现lock接口中的多数功能，加锁与解锁足够，但是一定要保证可重入性
- * @author songfayuan
+ *
+ * @author dinghao
+ * @date 2021/3/8
  */
 public interface DistributeLock {
 

@@ -3,7 +3,7 @@ package com.free.sharding.controller;
 import com.free.common.utils.R;
 import com.free.sharding.model.User;
 import com.free.sharding.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +16,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("user")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
     @GetMapping
@@ -33,7 +33,7 @@ public class UserController {
         return R.succeed(u, "查询成功");
     }
 
-    @PostMapping("/addUsers")
+    @PostMapping()
     public R add() {
         for (int i = 1; i <= 5; i++) {
             User user = new User();
