@@ -23,3 +23,4 @@ free_demo的存在就是为了向部分初学者提供免费的集成demo，用�
 
 有疑问可以加作者微信，随时交流，请注明加人的来意！^_^。
 
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0309/144415_c1bbb59f_4951941.png "wechat.png")
