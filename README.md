@@ -16,7 +16,7 @@ free_demo的存在就是为了向部分初学者提供免费的集成demo，用�
 提交问题反馈请说明正在使用的JDK版本、出现问题的组件包版本和相关依赖库版本。
 
 - [码云Gitee issue](https://gitee.com/dh_free/free_demo/issues)
-- [GitHub issue](https://github.com/dinghao2134593/free_demo/issues)
+- [GitHub issue](https://github.com/dh-free/free_demo/issues)
 -------------------------------------------------------------------------------
 
 ## 联系我
