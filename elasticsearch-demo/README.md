@@ -12,7 +12,7 @@
 * canal 1.1.4
 * mybatis-plus 3.3.0
 
-## 准备工作-配置篇
+## 准备工作-中间件配置篇
 
 > 项目依赖lombok插件，运行项目前，idea先安装lombok插件。
 
@@ -173,9 +173,26 @@ canal.conf:
 
 > 基本环境准备完毕
 
-## 启动es
-**windows双击bin/elasticsearch.bat 启动es服务，启动成功后访问http:127.0.0.1:9200，如果打印出版本信息则启动成功**
+## 准备工作-项目篇
 
+- 1.导入项目后修改application.yml配置文件里的数据库连接配置和elasticsearch配置（不懂得可以不改，用我默认的） 
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170405_1380d441_4951941.png "1617181419(1).png") 
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170423_1f684394_4951941.png "1617181423(1).png")
+
+- 2.导入数据库sql文件，创建一个名为es_demo的数据库，导入位于项目sql/文件夹下的es_article.sql文件，生成项目测试表。
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170451_01d18145_4951941.png "1617181477(1).png")
+
+## 启动各个中间件和项目
+- 1.启动es   
+windows双击es安装目录下/bin/elasticsearch.bat 启动es服务，启动成功后访问http:127.0.0.1:9200，如果打印出版本信息则启动成功
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170647_42d82908_4951941.png "1617181589(1).png")
+- 2.启动canal
+windows双击canal安装目录下/bin/startup.bat 启动canal服务，窗口显示如下则启动成功：
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170805_c91f6a48_4951941.png "1617181668(1).png")
+
+- 3.启动canal-adapter
+windows双击canal-adapter安装目录下/bin/startup.bat 启动canal-adapter服务，窗口显示如下则启动成功：
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170950_1b033d66_4951941.png "1617181774(1).png")
 &nbsp;
 ## 说明
 **本demo封装utils/EsUtil.java工具类，用于索引等操作**
