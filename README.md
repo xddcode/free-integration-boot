@@ -1,5 +1,5 @@
 ## 简介
-free_demo用于实现springboot2.0x整合各个目前比较火热的组件，并形成作者自有的demo，可供其他人学习使用，所有的demo都是经过
+ free-integration-boot用于实现springboot2.0x整合各个目前比较火热的组件，并形成作者自有的demo，可供其他人学习使用，所有的demo都是经过
 作者自己严格测试。
 
 ### 工程结构介绍：
