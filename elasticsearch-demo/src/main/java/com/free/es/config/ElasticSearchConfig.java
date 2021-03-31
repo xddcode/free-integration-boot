@@ -1,6 +1,6 @@
 package com.free.es.config;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -26,11 +26,11 @@ import java.util.List;
  * @date 2021/3/9
  */
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableConfigurationProperties(ElasticsearchProperties.class)
 public class ElasticSearchConfig {
 
-    private ElasticsearchProperties elasticsearchProperties;
+    private final ElasticsearchProperties elasticsearchProperties;
 
     private List<HttpHost> httpHosts = new ArrayList<>();
 

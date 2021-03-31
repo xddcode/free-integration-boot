@@ -58,7 +58,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
- <!--       <dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
@@ -71,12 +71,29 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>com.free</groupId>
             <artifactId>free-common</artifactId>
             <version>${free.project.version}</version>
+        </dependency>
+
+        <!--mysql数据全量同步-->
+        <dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.client</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.common</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.protocol</artifactId>
+            <version>1.1.4</version>
         </dependency>
     </dependencies>
 
