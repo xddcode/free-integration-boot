@@ -12,7 +12,7 @@
 * canal 1.1.4
 * mybatis-plus 3.3.0
 
-## 准备工作
+## 准备工作-配置篇
 
 > 项目依赖lombok插件，运行项目前，idea先安装lombok插件。
 
@@ -48,7 +48,7 @@ elasticsearch:
 > mysql需要开启binlog模式，因为canal同步是通过监听mysql的binlog
 
 1. 开启mysql的binlog
-找到my.ini（我是mysql5.7，有的低版本好像是my.cnf），添加已下配置：
+找到my.ini（我是mysql5.7，有的低版本好像是my.cnf），添加以下配置：
 
 ```
 [mysqld]
@@ -96,9 +96,83 @@ adapter是canal的客户端适配器，主要实现增量同步和全量同步�
 1.下载adapter
 - [下载地址](https://github.com/alibaba/canal/releases/tag/canal-1.1.5-alpha-2)
 
-2.解压到指定文件夹，并进行配置
+2.解压到指定文件夹，找到conf/application.yml进行配置（照着我底下的复制就行，注意一点：cluster.name的值和上方配置es的cluster.name保持一致）
 
-&nbsp;
+```
+server:
+  port: 8081
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+canal.conf:
+  mode: tcp #tcp kafka rocketMQ rabbitMQ
+  flatMessage: true
+  zookeeperHosts:
+  syncBatchSize: 1000
+  retries: 0
+  timeout:
+  accessKey:
+  secretKey:
+  consumerProperties:
+    # canal tcp consumer
+    canal.tcp.server.host: 127.0.0.1:11111
+    canal.tcp.zookeeper.hosts:
+    canal.tcp.batch.size: 500
+    canal.tcp.username:
+    canal.tcp.password:
+    # kafka consumer
+    kafka.bootstrap.servers: 127.0.0.1:9092
+    kafka.enable.auto.commit: false
+    kafka.auto.commit.interval.ms: 1000
+    kafka.auto.offset.reset: latest
+    kafka.request.timeout.ms: 40000
+    kafka.session.timeout.ms: 30000
+    kafka.isolation.level: read_committed
+    kafka.max.poll.records: 1000
+    # rocketMQ consumer
+    rocketmq.namespace:
+    rocketmq.namesrv.addr: 127.0.0.1:9876
+    rocketmq.batch.size: 1000
+    rocketmq.enable.message.trace: false
+    rocketmq.customized.trace.topic:
+    rocketmq.access.channel:
+    rocketmq.subscribe.filter:
+    # rabbitMQ consumer
+    rabbitmq.host:
+    rabbitmq.virtual.host:
+    rabbitmq.username:
+    rabbitmq.password:
+    rabbitmq.resource.ownerId:
+
+  srcDataSources:
+    defaultDS:
+      url: jdbc:mysql://127.0.0.1:3306/es_demo?useUnicode=true
+      username: root
+      password: root
+  canalAdapters:
+  - instance: example
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: logger
+      - name: es7
+        hosts: 127.0.0.1:9200
+        properties:
+          mode: rest
+          cluster.name: elasticsearch
+```
+
+> 简单演示我们用的是tcp模式同步es7，根据不同的配置还可以通过kafka rocketMQ rabbitMQ等消息机制，具体可以自行查阅资料
+
+3.在conf/es7目录下新建es的同步配置文件es_article.yml，并添加内容
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/165355_677d3cd8_4951941.png "1617180646(1).png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/165420_74921527_4951941.png "1617180694(1).png")
+
+> 基本环境准备完毕
+
 ## 启动es
 **windows双击bin/elasticsearch.bat 启动es服务，启动成功后访问http:127.0.0.1:9200，如果打印出版本信息则启动成功**
 
