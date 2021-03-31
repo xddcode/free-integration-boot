@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.free</groupId>
-    <artifactId>free_demo</artifactId>
+    <artifactId>free-integration-boot</artifactId>
     <version>1.0</version>
-    <name>free_demo</name>
+    <name>free-integration-boot</name>
     <packaging>pom</packaging>
 
     <properties>

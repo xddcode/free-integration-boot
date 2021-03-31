@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * 账户表业务接口
  *
@@ -24,7 +26,8 @@ public class AccountService {
      * 减账号金额
      */
     public void reduce(String userId, int money) {
-
+        AtomicInteger atomicInteger = new AtomicInteger();
+        atomicInteger.compareAndSet(5,2019);
         if ("U002".equals(userId)) {
             throw new RuntimeException("this is a mock Exception");
         }

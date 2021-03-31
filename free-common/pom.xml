@@ -9,7 +9,7 @@
 
     <parent>
         <groupId>com.free</groupId>
-        <artifactId>free_demo</artifactId>
+        <artifactId>free-integration-boot</artifactId>
         <version>1.0</version>
     </parent>
 
