@@ -18,13 +18,7 @@
 
  **该demo依赖es7、canal、canal-adapter三个中间件服务，请先安装准备好：**
 
-- [elasticsearch安装与部署](https://blog.csdn.net/jixieguang/article/details/110621561)
-- [canal-deployer安装与部署](https://blog.csdn.net/jixieguang/article/details/110621561)
-- [canal-adapter安装与部署](https://blog.csdn.net/jixieguang/article/details/110621561)
-- [elasticsearch安装与部署](https://blog.csdn.net/jixieguang/article/details/110621561)
-
-
-#### 一.elasticsearch
+#### 一. elasticsearch
 [官网](https://www.elastic.co/cn/downloads/elasticsearch)下载elasticsearch-7.11.1 -选择windows版本
 
 **修改es安装包下config/elasticsearch.yml配置文件中cluster.name的值：**
@@ -43,7 +37,7 @@ elasticsearch:
 > 总之双方的cluster name保持相同的值就ok  
 > 到此elasticsearch配置完成，先不急，继续往下
 
-#### 二.mysql
+#### 二. mysql
 
 > mysql需要开启binlog模式，因为canal同步是通过监听mysql的binlog
 
@@ -77,7 +71,7 @@ FLUSH PRIVILEGES;
 
 > 到此mysql配置完成，先不急，继续往下
 
-#### 三.canal
+#### 三. canal
 
 1.下载安装[canal-deployer](https://github.com/alibaba/canal/releases/tag/canal-1.1.5-alpha-2)
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/152154_67e1204b_4951941.png "1617175292(1).png")
@@ -169,7 +163,19 @@ canal.conf:
 
 3.在conf/es7目录下新建es的同步配置文件es_article.yml，并添加内容
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/165355_677d3cd8_4951941.png "1617180646(1).png")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/165420_74921527_4951941.png "1617180694(1).png")
+
+```
+dataSourceKey: defaultDS
+destination: example
+groupId: g1
+esMapping:
+  _index: ik_article
+  _id: _id
+  upsert: true
+  sql: "select id as _id,id as id,title,content,summary,author,is_end as isEnd,is_publish as isPublish,create_time as createTime from es_article"
+  etlCondition: "where create_time>={}"
+  commitBatch: 3000
+```
 
 > 基本环境准备完毕
 
@@ -186,32 +192,62 @@ canal.conf:
 - 1.启动es   
 windows双击es安装目录下/bin/elasticsearch.bat 启动es服务，启动成功后访问http:127.0.0.1:9200，如果打印出版本信息则启动成功
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170647_42d82908_4951941.png "1617181589(1).png")
-- 2.启动canal
+- 2.启动canal  
 windows双击canal安装目录下/bin/startup.bat 启动canal服务，窗口显示如下则启动成功：
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170805_c91f6a48_4951941.png "1617181668(1).png")
 
-- 3.启动canal-adapter
+- 3.启动canal-adapter  
 windows双击canal-adapter安装目录下/bin/startup.bat 启动canal-adapter服务，窗口显示如下则启动成功：
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170950_1b033d66_4951941.png "1617181774(1).png")
-&nbsp;
-## 说明
-**本demo封装utils/EsUtil.java工具类，用于索引等操作**
 
+- 4.启动项目  
+允许项目的启动类
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/171147_8b029450_4951941.png "1617181890(1).png")
 
-&nbsp;
-**本demo摸拟文章的插入与搜索，并且提供以下测试接口**
+## 测试
 
-1. 创建索引，并添加数据  
-http://localhost:8800/es/save 
-2. 查询全部数据  
-http://localhost:8800/es/findAll    
-3. 根据作者字段条件查询索引  
-http://localhost:8800/es/findByAuthor?text=
-4. 多字段匹配  
-http://localhost:8800/es/findMultiMatchQuery?text=  
-5. 多条件检索   
-http://localhost:8800/es/findByConditions?text=
-6. 删除索引库  
-http://localhost:8800/es/delIndel
+本demo模拟实现文章模块的增删改查，以及数据同步es，提供多个接口供用户测试
 
-**es初次启动后，必须先调用save方法初始化索引库，直接查询会报错**
+- 1.创建索引库 POST http://localhost:8800/es/createIndex
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/172006_8c5f8213_4951941.png "1617182387(1).png")
+   >  注：必须先调用此接口创建索引库，否则以下全部会报错
+
+- 2.删除索引库 POST http://localhost:8800/es/delIndex
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/172033_66c22722_4951941.png "1617182415(1).png")
+
+- 3.全量同步数据（将表中所有数据同步到es中） POST http://localhost:8081/etl/es7/es_article.yml (该接口canal提供，传入我们的配置文件)
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/172108_468c8575_4951941.png "1617182452(1).png")
+
+- 4.查询所有文章（优先查的是es中的数据，如果es出现异常则会去查数据库数据） GET http://localhost:8800/article
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0401/150043_51642da5_4951941.png "1617259808(1).png")
+> 此接口做了条件查询和分页，可选参数：  
+
+| 字段名     | 类型 | 是否必须 | 字段含义 |
+|---------|----|------|------|
+| page   |   int |   是   |   分页数   |
+| limit   |   int |   是   |   每页显示记录数   |
+| title   |   String |   否   |   标题   |
+| summery |  String  |    否  |    简介  |
+| content |  String  |    否  |    内容  |
+| author     |  String   |  否    |  作者    |
+| isEnd     |  int   |  否    |  是否完结   0否 1是 |
+| isPublish     |  int   |  否    |  是否发布 0否 1是    |
+| createTime |  Date    |    否  |    创建时间  |
+- 5.新增或修改文章 POST http://localhost:8800/article
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/172213_05e8107c_4951941.png "1617182517(1).png")
+
+- 6.删除文章 DELETE http://localhost:8800/article/{id}
+
+   >  注：由于已经开启了了增量同步，所以在每次调用增删改的同时，es中的数据也会及时同步。
+
+## 再次说明
+
+- **所有服务启动完毕后，记得先调用的创建索引库接口，创建我们的索引库**
+
+- **es记得安装分词器插件**
+
+- **mysql记得打开binlog模式**
+
+- **mysql与es的数据增量同步完全是由canal服务完成，所以canal一定要按照我的配置配置好**
+
+- **实在搞不明白的，可以加我聊天方式，问我，谢谢！**
