@@ -36,6 +36,20 @@ elasticsearch:
 ```
 > 总之双方的cluster name保持相同的值就ok  
 > 到此elasticsearch配置完成，先不急，继续往下
+#### 二. 安装es中文分词器
+- [下载地址](https://github.com/medcl/elasticsearch-analysis-ik/releases)
+
+由于我们的es是7.11.1版本的，所以中文分词器也选7.11.1版本：
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0401/151353_a80b2bbd_4951941.png "1617261217(1).png")
+
+下载好后。在es的安装目录/plugins目录下新建文件夹ik
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0401/151957_690dff72_4951941.png "1617261482(1).png")
+
+然后解压下载好的压缩包，将里面的所有内容解压到ik文件夹中：
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0401/152104_580dc09d_4951941.png "2.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0401/152111_129041c0_4951941.png "1.png")
+
+> 注：如果es已经启动，导入后记得重启es，重启后才会生效
 
 #### 二. mysql
 
