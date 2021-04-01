@@ -1,19 +1,23 @@
 package com.free.es.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.free.common.constant.EsIndexConstant;
+import com.free.common.utils.CodeEnum;
+import com.free.common.utils.PageResult;
 import com.free.es.mapper.ArticleMapper;
 import com.free.es.model.Article;
+import com.free.es.model.vo.ArticleVO;
 import com.free.es.service.ArticleService;
 import com.free.es.utils.EsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.TotalHits;
-import org.elasticsearch.action.search.SearchResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,28 +25,86 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> implements ArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     private final EsUtil esUtil;
 
     @Override
-    public List<Article> findAll() {
-        SearchResponse searchResponse = esUtil.search(EsIndexConstant.ARTICLE_INDEX, QueryBuilders.matchAllQuery());
-        SearchHit[] hits = searchResponse.getHits().getHits();
-        List<Article> articles = new ArrayList<>();
-        Arrays.stream(hits).forEach(hit -> {
-            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-            Article article = BeanUtil.mapToBean(sourceAsMap, Article.class, true);
-            articles.add(article);
-        });
-        return articles;
+    public PageResult<Article> findAll(ArticleVO articleVO){
+        SearchSourceBuilder searchSourceBuilder = getSearchSourceBuilder(articleVO);
+        try {
+            Page<Article> page = esUtil.search(searchSourceBuilder,articleVO.getPage(),articleVO.getLimit(),Article.class);
+            return builderResult(page,page.getRecords());
+        } catch (Exception e) {
+            log.error("es 查询异常，开始使用数据库做查询，错误为 ：{}", e);
+            Page<Article> page = new Page<>(articleVO.getPage(), articleVO.getLimit());
+            List<Article> list = baseMapper.selectListFull(page,articleVO);
+            return builderResult(page,list);
+        }
+    }
+    private <T> PageResult<T> builderResult(Page<T> pages, List<T> list) {
+        long total = pages.getTotal();
+        long current = pages.getCurrent();
+        long page = pages.getPages();
+        long limit = pages.getSize();
+        return PageResult.<T>builder()
+                .current(current)
+                .count(total)
+                .page(page)
+                .limit(limit)
+                .data(list)
+                .code(CodeEnum.SUCCESS.getCode())
+                .msg("查询成功")
+                .build();
     }
 
+    /**
+     * 拼接综合查询 查询条件
+     * @return
+     */
+    private SearchSourceBuilder getSearchSourceBuilder(ArticleVO articleVO){
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        //分页
+        if (articleVO.getPage() == null) {
+            articleVO.setPage(1);
+        }
+        if (articleVO.getLimit() == null) {
+            articleVO.setLimit(10);
+        }
+        sourceBuilder.from((articleVO.getPage() - 1) * articleVO.getLimit());
+        sourceBuilder.size(articleVO.getLimit());
+
+        // 符合条件查询
+        BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+
+        // 动态条件----keyword
+        if (StringUtils.isNotEmpty(articleVO.getKeyword())) {
+            boolBuilder.must(QueryBuilders.queryStringQuery(articleVO.getKeyword()));
+        }
+        // 拼接动态查询条件
+        if (StringUtils.isNotEmpty(articleVO.getTitle())) {
+            boolBuilder.must(QueryBuilders.termQuery("title", articleVO.getTitle()));
+        }
+
+        if (StringUtils.isNotEmpty(articleVO.getSummary())) {
+            boolBuilder.must(QueryBuilders.termQuery("summary", articleVO.getSummary()));
+        }
+
+        if (StringUtils.isNotEmpty(articleVO.getContent())) {
+            boolBuilder.must(QueryBuilders.termQuery("content", articleVO.getContent()));
+        }
+        sourceBuilder.query(boolBuilder);
+        // 排序
+        String esOrderField = "createTime";
+        FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(esOrderField);
+        fieldSortBuilder = fieldSortBuilder.order("orderDesc".equals(articleVO.getOrderSort()) ? SortOrder.DESC : SortOrder.ASC);
+        sourceBuilder.sort(fieldSortBuilder);
+        return sourceBuilder;
+    }
 
     @Override
     public boolean saveOrUpdateArticle(Article article) {
         article.setCreateTime(new Date());
-       // esUtil.insertRequest(EsIndexConstant.ARTICLE_INDEX, String.valueOf(article.getId()), article);
         return super.saveOrUpdate(article);
     }
 
@@ -73,7 +135,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
         return baseMapper.deleteById(id) > 0;
     }
 
-    @Override
+/*    @Override
     public List<Article> findByAuthor(String text) {
         //根据作者名称条件搜索，只匹配author为text的单个字段
         SearchResponse searchResponse = esUtil.search(EsIndexConstant.ARTICLE_INDEX, QueryBuilders.matchQuery("author", text));
@@ -87,14 +149,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
             articles.add(article);
         });
         return articles;
-    }
+    }*/
 
     /**
      * 多个字段匹配text
      *
      * @param text 关键字
      */
-    @Override
+/*    @Override
     public List<Article> findMultiMatchQuery(String text) {
         //只匹配以下字段中含有text的数据
         String[] fieldNames = {"title", "content", "summary", "author"};
@@ -107,7 +169,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
             articles.add(article);
         });
         return articles;
-    }
+    }*/
 
     /**
      * 多条件检索
@@ -118,7 +180,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
      *
      * @param text 关键字
      */
-    @Override
+/*    @Override
     public List<Article> findByConditions(String text) {
         //bool符合查询
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder().
@@ -134,6 +196,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
             articles.add(article);
         });
         return articles;
-    }
+    }*/
 
 }

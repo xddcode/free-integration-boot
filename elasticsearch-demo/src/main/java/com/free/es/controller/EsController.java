@@ -1,12 +1,12 @@
 package com.free.es.controller;
 
+import com.free.common.utils.PageResult;
 import com.free.common.utils.R;
 import com.free.es.model.Article;
+import com.free.es.model.vo.ArticleVO;
 import com.free.es.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/article")
@@ -19,37 +19,37 @@ public class EsController {
      * 查询文章列表
      */
     @GetMapping({"", "/list"})
-    public R findAll() {
-        List<Article> list = articleService.findAll();
+    public R findAll(ArticleVO articleVO) {
+        PageResult<Article> list = articleService.findAll(articleVO);
         return R.succeed(list, "查询成功");
     }
 
     /**
      * 根据作者名称检索
      */
-    @GetMapping("findByAuthor")
+/*    @GetMapping("findByAuthor")
     public R findByAuthor(String text) {
         List<Article> list = articleService.findByAuthor(text);
         return R.succeed(list, "查询成功");
     }
 
-    /**
+    *//**
      * 多个字段匹配text
-     */
+     *//*
     @GetMapping("findMultiMatchQuery")
     public R findMultiMatchQuery(String text) {
         List<Article> list = articleService.findMultiMatchQuery(text);
         return R.succeed(list, "查询成功");
     }
 
-    /**
+    *//**
      * 匹配多条件搜索
-     */
+     *//*
     @GetMapping("findByConditions")
     public R findByConditions(String text) {
         List<Article> list = articleService.findByConditions(text);
         return R.succeed(list, "查询成功");
-    }
+    }*/
 
     /**
      * 新增或修改文章信息

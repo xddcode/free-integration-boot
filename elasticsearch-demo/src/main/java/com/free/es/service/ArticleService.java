@@ -1,16 +1,16 @@
 package com.free.es.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.free.common.utils.PageResult;
 import com.free.es.model.Article;
-
-import java.util.List;
+import com.free.es.model.vo.ArticleVO;
 
 public interface ArticleService extends IService<Article> {
 
     /**
      * 搜索所有文章-es查询
      */
-    List<Article> findAll();
+    PageResult<Article> findAll(ArticleVO articleVO);
 
     /**
      * 插入或修改文章
@@ -32,20 +32,20 @@ public interface ArticleService extends IService<Article> {
      *
      * @param text 关键字
      */
-    List<Article> findByAuthor(String text);
+  //  List<Article> findByAuthor(String text);
 
     /**
      * 多个字段匹配text
      *
      * @param text 关键字
      */
-    List<Article> findMultiMatchQuery(String text);
+   // List<Article> findMultiMatchQuery(String text);
 
     /**
      * 匹配多条件搜索
      *
      * @param text 关键字
      */
-    List<Article> findByConditions(String text);
+   // List<Article> findByConditions(String text);
 
 }

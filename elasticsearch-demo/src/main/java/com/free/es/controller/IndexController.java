@@ -2,6 +2,7 @@ package com.free.es.controller;
 
 import com.free.common.constant.EsIndexConstant;
 import com.free.common.utils.R;
+import com.free.es.model.Article;
 import com.free.es.utils.EsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,12 @@ public class IndexController {
      */
     @RequestMapping("createIndex")
     public R createIndex() {
-        if (esUtil.createIndexRequest(EsIndexConstant.ARTICLE_INDEX)) {
+        try {
+            esUtil.createIndexIfNotExist(Article.class);
             return R.succeed("创建成功");
+        } catch (Exception e) {
+            return R.failed("创建失败");
         }
-        return R.failed("创建失败");
     }
 
     /**
@@ -30,9 +33,11 @@ public class IndexController {
      */
     @RequestMapping("delIndex")
     public R delIndex() {
-        if(esUtil.deleteIndexRequest(EsIndexConstant.ARTICLE_INDEX)){
+        try {
+            esUtil.delIndex(EsIndexConstant.ARTICLE_INDEX);
             return R.succeed("删除成功");
+        } catch (Exception e) {
+            return R.failed("删除失败");
         }
-        return R.failed("删除失败");
     }
 }

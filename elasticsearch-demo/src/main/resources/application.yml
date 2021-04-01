@@ -47,6 +47,12 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
+#elasticsearch 配置：
 elasticsearch:
-  clusterNodes: 127.0.0.1:9200
-  clusterName: elasticsearch
+  address: 127.0.0.1:9200  #如果是集群，用逗号隔开
+  connect-timeout: 1000   #连接超时时间
+  socket-timeout: 30000   #连接超时时间
+  connection-request-timeout: 500
+  max-connect-num: 100
+  max-connect-per-route: 100
+
