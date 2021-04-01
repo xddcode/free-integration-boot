@@ -44,7 +44,7 @@ public class Article extends Model<Article> {
     private Integer isEnd;
 
     @Field(type = FieldType.INTEGER)
-    private Integer is_publish;
+    private Integer isPublish;
 
     @Field(type = FieldType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

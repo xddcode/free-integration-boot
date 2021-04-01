@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.free.es.model.Article;
 import com.free.es.model.vo.ArticleVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
 
-    List<Article> selectListFull(Page page, ArticleVO articleVO);
+    List<Article> selectListFull(@Param("page") Page page, @Param("u") ArticleVO articleVO);
 }

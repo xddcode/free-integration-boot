@@ -6,22 +6,28 @@
         select * from es_article
         <where>
             1=1
-            <if test="title!=null and title!=''">
-                and title = #{title}
+            <if test="u.title!=null and u.title!=''">
+                and title = #{u.title}
             </if>
 
-            <if test="content!=null and content!=''">
-                and content = #{content}
+            <if test="u.content!=null and u.content!=''">
+                and u.content = #{u.content}
             </if>
-            <if test="summary!=null and summary!=''">
-                and summary=#{summary}
+            <if test="u.summary!=null and u.summary!=''">
+                and summary = #{u.summary}
             </if>
 
-            <if test="author!=null and author!=''">
-                and author=#{author}
+            <if test="u.author!=null and u.author!=''">
+                and author = #{u.author}
             </if>
-            <if test="keyword!=null and keyword!=''">
-                <bind name="pattern" value="'%' + keyword + '%'"/>
+            <if test="u.isEnd!=null">
+                and is_end = #{u.isEnd}
+            </if>
+            <if test="u.isPublish!=null and u.isPublish!=''">
+                and is_publish = #{u.isPublish}
+            </if>
+            <if test="u.keyword!=null and u.keyword!=''">
+                <bind name="pattern" value="'%' + u.keyword + '%'"/>
                 and
                 CONCAT(
                 IFNull(title,''),
@@ -31,11 +37,11 @@
                 )
                 like #{pattern}
             </if>
-            <if test="startTime!=null and startTime!=''">
-                <![CDATA[   and DATE_FORMAT(create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')   ]]>
+            <if test="u.startTime!=null and u.startTime!=''">
+                <![CDATA[   and DATE_FORMAT(create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{u.startTime}, '%Y-%m-%d')   ]]>
             </if>
-            <if test="endTime!=null and endTime!=''">
-                <![CDATA[  and DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+            <if test="u.endTime!=null and u.endTime!=''">
+                <![CDATA[  and DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{u.endTime}, '%Y-%m-%d')    ]]>
             </if>
         </where>
     </select>

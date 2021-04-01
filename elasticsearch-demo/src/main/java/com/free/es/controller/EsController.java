@@ -25,33 +25,6 @@ public class EsController {
     }
 
     /**
-     * 根据作者名称检索
-     */
-/*    @GetMapping("findByAuthor")
-    public R findByAuthor(String text) {
-        List<Article> list = articleService.findByAuthor(text);
-        return R.succeed(list, "查询成功");
-    }
-
-    *//**
-     * 多个字段匹配text
-     *//*
-    @GetMapping("findMultiMatchQuery")
-    public R findMultiMatchQuery(String text) {
-        List<Article> list = articleService.findMultiMatchQuery(text);
-        return R.succeed(list, "查询成功");
-    }
-
-    *//**
-     * 匹配多条件搜索
-     *//*
-    @GetMapping("findByConditions")
-    public R findByConditions(String text) {
-        List<Article> list = articleService.findByConditions(text);
-        return R.succeed(list, "查询成功");
-    }*/
-
-    /**
      * 新增或修改文章信息
      */
     @PostMapping()
@@ -62,16 +35,6 @@ public class EsController {
         return R.failed("操作失败");
     }
 
-/*    *//**
-     * 批量插入文章
-     *//*
-    @PostMapping("saveBatch")
-    public R saveBatch() {
-        if (articleService.saveBatch()) {
-            return R.succeed("操作成功");
-        }
-        return R.failed("操作失败");
-    }*/
 
     /**
      * 根据id删除文章

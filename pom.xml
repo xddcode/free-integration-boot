@@ -24,6 +24,7 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <guava.version>28.1-jre</guava.version>
         <sharding-sphere.version>4.0.0-RC1</sharding-sphere.version>
+        <elasticsearch.version>7.2.0</elasticsearch.version>
     </properties>
 
     <modules>
