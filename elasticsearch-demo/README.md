@@ -201,7 +201,7 @@ windows双击canal-adapter安装目录下/bin/startup.bat 启动canal-adapter服
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170950_1b033d66_4951941.png "1617181774(1).png")
 
 - 4.启动项目  
-允许项目的启动类
+运行项目的启动类
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/171147_8b029450_4951941.png "1617181890(1).png")
 
 ## 测试
@@ -248,6 +248,8 @@ windows双击canal-adapter安装目录下/bin/startup.bat 启动canal-adapter服
 
 - **mysql记得打开binlog模式**
 
-- **mysql与es的数据增量同步完全是由canal服务完成，所以canal一定要按照我的配置配置好**
+- **mysql与es的数据增量同步完全是由canal服务监听mysql的binlog实现完成的，我们的代码是无侵入和无感知的，所以canal一定要按照我的配置配置好**
+
+- **完整测试我们最终要启动4个服务，1、es服务；2、canal服务；3、canal-adapter服务；4、本项目的demo服务**
 
 - **实在搞不明白的，可以加我聊天方式，问我，谢谢！**
