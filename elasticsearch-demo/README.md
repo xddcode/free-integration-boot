@@ -183,7 +183,7 @@ esMapping:
 
 - 1.导入项目后修改application.yml配置文件里的数据库连接配置和elasticsearch配置（不懂得可以不改，用我默认的） 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170405_1380d441_4951941.png "1617181419(1).png") 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170423_1f684394_4951941.png "1617181423(1).png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0401/150316_c9d91f9f_4951941.png "1.png")
 
 - 2.导入数据库sql文件，创建一个名为es_demo的数据库，导入位于项目sql/文件夹下的es_article.sql文件，生成项目测试表。
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0331/170451_01d18145_4951941.png "1617181477(1).png")
